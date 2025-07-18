@@ -32,3 +32,5 @@
 *.app
 /.vs
 /log
+build/Developer/base.map
+*.pdb

@@ -273,6 +273,7 @@ public:
 	void Main( );
 	void EntModulate( CBaseEntity* ent );
 	void Watermark( );
+	void DrawIndicators();
 	void SkyboxChanger( );
 	void KeybindsList( );
 	void ModelChanger( );

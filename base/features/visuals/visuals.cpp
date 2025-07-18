@@ -37,6 +37,7 @@ void CVisuals::Main( ) {
 		Render::Line( Vector2D( w / 2, 0 ), Vector2D( w / 2, h ), Color( 0, 0, 0 ) );
 	}
 
+	DrawIndicators();
 	ManageHitmarkers( );
 	AutoPeekIndicator( );
 	BulletTracers.Draw( );
@@ -272,6 +273,120 @@ void CVisuals::Watermark( ) {
 	}*/
 
 	//Render::Text( Fonts::Menu, pos + Vector2D( 0, 30 ), Color( 255, 255, 255 ), 0, std::to_string( ctx.m_iRealOutLatencyTicks ).c_str( ) );
+}
+
+void CVisuals::DrawIndicators() {
+
+	if (!ctx.m_pLocal || ctx.m_pLocal->IsDead())
+		return;
+
+	struct Indicator {
+		Color m_colColor;
+		std::string m_strText;
+	};
+
+	/*
+	if ( Config::Get<bool>( Vars.ExploitsDoubletap ) && Config::Get<keybind_t>( Vars.ExploitsDoubletapKey ).enabled )
+		addBind( _( "Doubletap" ), keyBindSize.x, binds, Config::Get<keybind_t>( Vars.ExploitsDoubletapKey ).mode );
+
+	if ( Config::Get<bool>( Vars.ExploitsHideshots ) && Config::Get<keybind_t>( Vars.ExploitsHideshotsKey ).enabled )
+		addBind( _( "Hideshots" ), keyBindSize.x, binds, Config::Get<keybind_t>( Vars.ExploitsHideshotsKey ).mode );
+
+	if ( Config::Get<bool>( Vars.RagebotDamageOverride ) && Config::Get<keybind_t>( Vars.RagebotDamageOverrideKey ).enabled )
+		addBind( _( "Damage override" ), keyBindSize.x, binds, Config::Get<keybind_t>( Vars.RagebotDamageOverrideKey ).mode );
+
+	if ( Config::Get<keybind_t>( Vars.DBGKeybind ).enabled )
+		addBind( _( "Air stuck" ), keyBindSize.x, binds, Config::Get<keybind_t>( Vars.DBGKeybind ).mode );
+
+	if ( Config::Get<keybind_t>( Vars.RagebotForceBaimKey ).enabled )
+		addBind( _( "Force baim" ), keyBindSize.x, binds, Config::Get<keybind_t>( Vars.RagebotForceBaimKey ).mode );
+
+	if ( Config::Get<keybind_t>( Vars.RagebotForceSafePointKey ).enabled )
+		addBind( _( "Force safe point" ), keyBindSize.x, binds, Config::Get<keybind_t>( Vars.RagebotForceSafePointKey ).mode );
+
+	if ( Config::Get<keybind_t>( Vars.RagebotForceYawSafetyKey ).enabled )
+		addBind( _( "Force safe yaw" ), keyBindSize.x, binds, Config::Get<keybind_t>( Vars.RagebotForceYawSafetyKey ).mode );
+
+	if ( Config::Get<bool>( Vars.MiscSlowWalk ) && Config::Get<keybind_t>( Vars.MiscSlowWalkKey ).enabled )
+		addBind( _( "Slow walk" ), keyBindSize.x, binds, Config::Get<keybind_t>( Vars.MiscSlowWalkKey ).mode );
+
+	if ( Config::Get<bool>( Vars.MiscAutoPeek ) && Config::Get<keybind_t>( Vars.MiscAutoPeekKey ).enabled )
+		addBind( _( "Auto peek" ), keyBindSize.x, binds, Config::Get<keybind_t>( Vars.MiscAutoPeekKey ).mode );
+
+	if ( Config::Get<int>( Vars.AntiaimFreestanding ) && Config::Get<keybind_t>( Vars.AntiaimFreestandingKey ).enabled )
+		addBind( _( "Freestanding" ), keyBindSize.x, binds, Config::Get<keybind_t>( Vars.AntiaimFreestandingKey ).mode );
+
+	if ( Config::Get<bool>( Vars.MiscFakeDuck ) && Config::Get<keybind_t>( Vars.MiscFakeDuckKey ).enabled )
+		addBind( _( "Fake duck" ), keyBindSize.x, binds, Config::Get<keybind_t>( Vars.MiscFakeDuckKey ).mode );
+	
+	*/
+
+	std::vector<Indicator> m_vecIndicators;
+	m_vecIndicators.reserve(7);
+	if (ctx.m_pLocal->m_flVelocityModifier() != 1.f) {
+		Indicator ind{ };
+		float alpha = 1 - ctx.m_pLocal->m_flVelocityModifier();
+		ind.m_colColor = Color(255, 255, 255, static_cast<int>(255 * alpha));
+		ind.m_strText = _("SLOW");
+		m_vecIndicators.push_back(ind);
+	}
+
+	if (Config::Get<keybind_t>(Vars.RagebotForceBaimKey).enabled) {
+		Indicator ind{ };
+		ind.m_colColor = Color(255, 255, 255);
+		ind.m_strText = _("BAIM");
+		m_vecIndicators.push_back(ind);
+	}
+
+	if (Config::Get<bool>(Vars.RagebotDamageOverride) && Config::Get<keybind_t>(Vars.RagebotDamageOverrideKey).enabled) {
+		Indicator ind{ };
+		ind.m_colColor = Color(255, 255, 255);
+		ind.m_strText = _("DMG");
+		m_vecIndicators.push_back(ind);
+	}
+
+	if (Config::Get<bool>(Vars.MiscAutoPeek) && Config::Get<keybind_t>(Vars.MiscAutoPeekKey).enabled)
+	{
+		Indicator ind{ };
+		ind.m_colColor = Color(255, 255, 255);
+		ind.m_strText = _("AP");
+		m_vecIndicators.push_back(ind);
+	}
+
+	if (Config::Get<keybind_t>(Vars.RagebotForceSafePointKey).enabled)
+	{
+		Indicator ind{ };
+		ind.m_colColor = Color(255, 255, 255);
+		ind.m_strText = _("SP");
+		m_vecIndicators.push_back(ind);
+	}
+
+	if (Config::Get<bool>(Vars.ExploitsDoubletap) && Config::Get<keybind_t>(Vars.ExploitsDoubletapKey).enabled)
+	{
+		Indicator ind{ };
+		ind.m_colColor = Color(255, 255, 255);
+		ind.m_strText = _("DT");
+		m_vecIndicators.push_back(ind);
+	}
+
+	if (Config::Get<bool>(Vars.ExploitsHideshots) && Config::Get<keybind_t>(Vars.ExploitsHideshotsKey).enabled) {
+		Indicator ind{ };
+		ind.m_colColor = Color(255, 255, 255);
+		ind.m_strText = _("HS");
+		m_vecIndicators.push_back(ind);
+	}
+
+
+	m_vecIndicators.shrink_to_fit();
+
+	if (m_vecIndicators.empty())
+		return;
+
+	// iterate and draw indicators.
+	for (size_t i{ }; i < m_vecIndicators.size(); ++i) {
+		auto& indicator = m_vecIndicators[i];
+		Render::Text(Fonts::Indicator, 20, ctx.m_ve2ScreenSize.y - 80 - (30 * i), indicator.m_colColor, FONT_LEFT, indicator.m_strText.c_str());
+	}
 }
 
 void CVisuals::OtherEntities( CBaseEntity* ent ) {

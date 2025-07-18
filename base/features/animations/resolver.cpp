@@ -66,9 +66,5 @@ void CAnimationSys::Resolver( PlayerEntry& entry, LagRecord_t* current ) {
 	if ( !entry.m_optPreviousData.has_value( ) )
 		return;
 
-	if (current->m_cAnimData.m_vecVelocity.Length2D() < 1.0f) {
-
-	}
-
 	Scripting::DoCallback( FNV1A::HashConst( "resolver" ), entry, current->m_cAnimData );
 }
