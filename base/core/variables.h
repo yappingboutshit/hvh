@@ -309,6 +309,7 @@ struct Variables_t {
 	C_ADD_VARIABLE( keybind_t, AntiaimFreestandingKey, { } );
 	C_ADD_VARIABLE( keybind_t, AntiaimInvert, { } );
 	C_ADD_VARIABLE( keybind_t, AntiaimRight, { } );
+	C_ADD_VARIABLE(keybind_t, AntiaimBack, { });
 	C_ADD_VARIABLE( keybind_t, AntiaimLeft, { } );
 	C_ADD_VARIABLE( Color, AntiaimManualCol, Color( 255, 255, 255 ) );
 

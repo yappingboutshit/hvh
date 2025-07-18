@@ -29,68 +29,83 @@ void Inputsys::update( ) {
 
 #define DODAKEYBINDCUH( bindname ) KeysToCheck.emplace_back( Config::Get<keybind_t>( Vars.##bindname ).key ); Config::Get<keybind_t>( Vars.##bindname ).Resolve( );
 
-void Inputsys::updateNeededKeys( ) {
-	if ( !Interfaces::Engine->IsActiveApp( ) )
+void Inputsys::updateNeededKeys() {
+	if (!Interfaces::Engine->IsActiveApp())
 		return;
 
-	if ( Menu::m_bOpened ) {
-		for ( int i = 0; i < 256; i++ )
-			KeysToCheck.emplace_back( i );
+	if (Menu::m_bOpened) {
+		for (int i = 0; i < 256; i++)
+			KeysToCheck.emplace_back(i);
 	}
 	else {
-		if ( !Displacement::Cvars.cl_mouseenable->GetBool( ) )
+		if (!Displacement::Cvars.cl_mouseenable->GetBool())
 			return;
 
-		if ( Interfaces::Engine->IsConsoleVisible( ) )
+		if (Interfaces::Engine->IsConsoleVisible())
 			return;
 
-		DODAKEYBINDCUH( VisThirdPersonKey );
-		DODAKEYBINDCUH( MiscSlowWalkKey );
-		DODAKEYBINDCUH( MiscFakeDuckKey );
-		DODAKEYBINDCUH( MiscAutoPeekKey );
-		DODAKEYBINDCUH( AntiaimInvert );
-		DODAKEYBINDCUH( RagebotDamageOverrideKey );
-		DODAKEYBINDCUH( RagebotForceBaimKey );
-		DODAKEYBINDCUH( RagebotForceSafePointKey );
-		DODAKEYBINDCUH( ExploitsDoubletapKey );
-		DODAKEYBINDCUH( ExploitsHideshotsKey );
-		DODAKEYBINDCUH( DBGKeybind );
-		DODAKEYBINDCUH( RagebotForceYawSafetyKey );
-		DODAKEYBINDCUH( AntiaimFreestandingKey );
+		DODAKEYBINDCUH(VisThirdPersonKey);
+		DODAKEYBINDCUH(MiscSlowWalkKey);
+		DODAKEYBINDCUH(MiscFakeDuckKey);
+		DODAKEYBINDCUH(MiscAutoPeekKey);
+		DODAKEYBINDCUH(AntiaimInvert);
+		DODAKEYBINDCUH(RagebotDamageOverrideKey);
+		DODAKEYBINDCUH(RagebotForceBaimKey);
+		DODAKEYBINDCUH(RagebotForceSafePointKey);
+		DODAKEYBINDCUH(ExploitsDoubletapKey);
+		DODAKEYBINDCUH(ExploitsHideshotsKey);
+		DODAKEYBINDCUH(DBGKeybind);
+		DODAKEYBINDCUH(RagebotForceYawSafetyKey);
+		DODAKEYBINDCUH(AntiaimFreestandingKey);
 
 
-		if ( !Config::Get<keybind_t>( Vars.AntiaimRight ).enabled )
-			DODAKEYBINDCUH( AntiaimRight );
+		if (!Config::Get<keybind_t>(Vars.AntiaimRight).enabled)
+			DODAKEYBINDCUH(AntiaimRight);
 
-		if ( !Config::Get<keybind_t>( Vars.AntiaimLeft ).enabled )
-			DODAKEYBINDCUH( AntiaimLeft );
+		if (!Config::Get<keybind_t>(Vars.AntiaimLeft).enabled)
+			DODAKEYBINDCUH(AntiaimLeft);
+
+		if (!Config::Get<keybind_t>(Vars.AntiaimBack).enabled)
+			DODAKEYBINDCUH(AntiaimBack);
 
 		//if ( !Config::Get<keybind_t>( Vars.AntiaimLeft ).enabled && !Config::Get<keybind_t>( Vars.AntiaimRight ).enabled )
 		//	Features::Antiaim.ManualSide = 0;
 
-		if ( Config::Get<keybind_t>( Vars.AntiaimLeft ).enabled ) {
-			if ( Features::Antiaim.ManualSide == 1 )
-				Features::Antiaim.ManualSide = 0;
+		if (Config::Get<keybind_t>(Vars.AntiaimLeft).enabled) {
+			if (Features::Antiaim.ManualSide == Features::Antiaim.ManualDirection::LEFT)
+				Features::Antiaim.ManualSide = Features::Antiaim.ManualDirection::NONE;
 			else
-				Features::Antiaim.ManualSide = 1;
+				Features::Antiaim.ManualSide = Features::Antiaim.ManualDirection::LEFT;
 
-			Config::Get<keybind_t>( Vars.AntiaimLeft ).enabled = false;
+			Config::Get<keybind_t>(Vars.AntiaimLeft).enabled = false;
 		}
 
-		if ( Config::Get<keybind_t>( Vars.AntiaimRight ).enabled ) {
-			if ( Features::Antiaim.ManualSide == 2 )
-				Features::Antiaim.ManualSide = 0;
+		if (Config::Get<keybind_t>(Vars.AntiaimRight).enabled) {
+			if (Features::Antiaim.ManualSide == Features::Antiaim.ManualDirection::RIGHT)
+				Features::Antiaim.ManualSide = Features::Antiaim.ManualDirection::NONE;
 			else
-				Features::Antiaim.ManualSide = 2;
+				Features::Antiaim.ManualSide = Features::Antiaim.ManualDirection::RIGHT;
 
-			Config::Get<keybind_t>( Vars.AntiaimRight ).enabled = false;
+			Config::Get<keybind_t>(Vars.AntiaimRight).enabled = false;
 		}
 
-		if ( !Config::Get<keybind_t>( Vars.AntiaimRight ).key
+
+		if (Config::Get<keybind_t>(Vars.AntiaimBack).enabled) {
+			if (Features::Antiaim.ManualSide == Features::Antiaim.ManualDirection::BACK)
+				Features::Antiaim.ManualSide = Features::Antiaim.ManualDirection::NONE;
+			else
+				Features::Antiaim.ManualSide = Features::Antiaim.ManualDirection::BACK;
+
+			Config::Get<keybind_t>(Vars.AntiaimBack).enabled = false;
+		}
+
+		if (!Config::Get<keybind_t>(Vars.AntiaimRight).key
+			&& !Config::Get<keybind_t>(Vars.AntiaimBack).key
 			&& !Config::Get<keybind_t>( Vars.AntiaimLeft ).key
 			&& Config::Get<keybind_t>( Vars.AntiaimRight ).mode != EKeyMode::AlwaysOn
-			&& Config::Get<keybind_t>( Vars.AntiaimLeft ).mode != EKeyMode::AlwaysOn )
-			Features::Antiaim.ManualSide = 0;
+			&& Config::Get<keybind_t>( Vars.AntiaimLeft ).mode != EKeyMode::AlwaysOn 
+			&& Config::Get<keybind_t>(Vars.AntiaimBack).mode != EKeyMode::AlwaysOn)
+			Features::Antiaim.ManualSide = Features::Antiaim.ManualDirection::NONE;
 
 		ctx.m_bExploitsEnabled = ( Config::Get<bool>( Vars.ExploitsDoubletap ) && Config::Get<keybind_t>( Vars.ExploitsDoubletapKey ).enabled )
 			|| ( Config::Get<bool>( Vars.ExploitsHideshots ) && Config::Get<keybind_t>( Vars.ExploitsHideshotsKey ).enabled );

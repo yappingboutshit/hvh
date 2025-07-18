@@ -131,14 +131,16 @@ float CAntiAim::BaseYaw( CUserCmd& cmd ) {
 		m_iChoiceSide = side;
 
 	if ( Config::Get<bool>( Vars.AntiAimManualDir ) ) {
-		if ( ManualSide == 1 ) {
+		if (ManualSide == 2) {
 			yaw += 90.f;
 			return yaw;
 		}
-		else if ( ManualSide == 2 ) {
+		else if (ManualSide == 3) {
 			yaw -= 90.f;
 			return yaw;
 		}
+		else if (ManualSide == 1)
+			return yaw + 180.f;
 	}
 
 	if ( side && Config::Get<int>( Vars.AntiaimFreestanding ) == 1 ) {

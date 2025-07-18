@@ -179,6 +179,9 @@ void Menu::Register( ) {
 
 			generalGroup->Register( _( "Manual direction indicator" ), &Config::Get<bool>( Vars.AntiAimManualDirInd ) );
 			generalGroup->Register( &Config::Get<Color>( Vars.AntiaimManualCol ) );
+			generalGroup->Register(_("Back"));
+			generalGroup->Register(&Config::Get<keybind_t>(Vars.AntiaimBack));
+			Config::Get<keybind_t>(Vars.AntiaimBack).mode = EKeyMode::Toggle;
 			generalGroup->Register( _( "Left" ) );
 			generalGroup->Register( &Config::Get<keybind_t>( Vars.AntiaimLeft ) );
 			Config::Get<keybind_t>( Vars.AntiaimLeft ).mode = EKeyMode::Toggle;

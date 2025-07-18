@@ -13,6 +13,7 @@ namespace Fonts
 	inline HFont NameESP;
 	inline HFont DamageMarker;
 	inline HFont HealthESP;
+	inline HFont ManualIndicator;
 	inline HFont Indicator;
 	inline HFont Menu;
 	inline HFont MenuTabs;

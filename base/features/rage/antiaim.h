@@ -8,13 +8,21 @@
 
 class CAntiAim {
 public:
+
+	enum ManualDirection { 
+		NONE,
+		BACK,
+		LEFT,
+		RIGHT
+	};
+
 	float Pitch( );
 	void FakeLag( int cmdNum );
 	void RunLocalModifications( CUserCmd& cmd, int tickbase );
 	float BaseYaw( CUserCmd& cmd );
 	bool Condition( CUserCmd& cmd, bool checkCmd = false );
 
-	int ManualSide{ };
+	ManualDirection ManualSide{ };
 	bool Invert{ };
 	int m_iChoiceSide{ };
 private:

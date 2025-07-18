@@ -350,9 +350,6 @@ void FASTCALL Hooks::hkFrameStageNotify( IBaseClientDll* thisptr, int edx, EClie
 bool FASTCALL Hooks::hkWriteUserCmdDeltaToBuffer( void* ecx, void* edx, int slot, bf_write* buf, int from, int to, bool is_new_command ) {
 	static auto oWriteUserCmdDeltaToBuffer = DTR::WriteUserCmdDeltaToBuffer.GetOriginal<decltype( &hkWriteUserCmdDeltaToBuffer )>( );
 
-	if ( Config::Get<keybind_t>( Vars.RagebotForceBaimKey ).enabled )
-		return true;
-
 	if ( from == -1 ) {
 		const auto moveMsg{ reinterpret_cast< MoveMsg_t* >( *reinterpret_cast< std::uintptr_t* >(
 			reinterpret_cast< std::uintptr_t >( _AddressOfReturnAddress( ) ) - sizeof( std::uintptr_t ) ) - 0x58u ) };

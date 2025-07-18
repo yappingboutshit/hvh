@@ -298,6 +298,7 @@ private:
 	bool m_bKeybindDragging{ };
 
 	void AutoPeekIndicator( );
+	void ManualAntiAim();
 	void OtherEntities( CBaseEntity* ent );
 	void DrawGrenade( CBaseEntity* ent, int maxAlpha );
 	void DrawWrappingRing( CBaseEntity* entity, float seconds, const char* name, float spawntime, float radius, int maxAlpha );

@@ -57,23 +57,7 @@ void CVisuals::Main( ) {
 			Render::Line( center - Vector2D( 1, 0 ), center + Vector2D( add, 0 ), color );
 			Render::Line( center - Vector2D( 0, 1 ), center + Vector2D( 0, add ), color );
 		}
-
-		if ( Config::Get<bool>( Vars.AntiAimManualDirInd ) ) {
-			const auto& col{ Config::Get<Color>( Vars.AntiaimManualCol ) };
-
-			Vector2D
-				p1{ w / 2 - 55, h / 2 + 10 },
-				p2{ w / 2 - 75, h / 2 },
-				p3{ w / 2 - 55, h / 2 - 10 };
-
-			Render::Triangle( p1, p2, p3, Features::Antiaim.ManualSide == 1 ? col : Color( 125, 125, 125, 150 ) );
-
-			p1 = { w / 2 + 55, h / 2 - 10 };
-			p2 = { w / 2 + 75, h / 2 };
-			p3 = { w / 2 + 55, h / 2 + 10 };
-
-			Render::Triangle( p1, p2, p3, Features::Antiaim.ManualSide == 2 ? col : Color( 125, 125, 125, 150 ) );
-		}
+		ManualAntiAim();
 	}
 
 	GrenadePrediction.Paint( );
@@ -387,6 +371,17 @@ void CVisuals::DrawIndicators() {
 		auto& indicator = m_vecIndicators[i];
 		Render::Text(Fonts::Indicator, 20, ctx.m_ve2ScreenSize.y - 80 - (30 * i), indicator.m_colColor, FONT_LEFT, indicator.m_strText.c_str());
 	}
+}
+
+
+void CVisuals::ManualAntiAim() {
+	Color color = Config::Get<Color>(Vars.AntiaimManualCol);
+	auto ScreenSize = ctx.m_ve2ScreenSize;
+	auto center = ScreenSize / 2;
+
+	Render::Text(Fonts::ManualIndicator, center.x - 40 - Render::GetTextSize("<", Fonts::ManualIndicator).x, center.y - Render::GetTextSize("<", Fonts::ManualIndicator).x / 2.f - 5, Features::Antiaim.ManualSide == Features::Antiaim.ManualDirection::LEFT ? color : Color(188, 188, 188, 255), FONT_LEFT, _("<"));
+	Render::Text(Fonts::ManualIndicator, center.x + 40, center.y - Render::GetTextSize(">", Fonts::ManualIndicator).y / 2.f - 5, Features::Antiaim.ManualSide == Features::Antiaim.ManualDirection::RIGHT ? color : Color(188, 188, 188, 255), FONT_LEFT, _(">"));
+	Render::Text(Fonts::ManualIndicator, center.x - Render::GetTextSize("v", Fonts::ManualIndicator).x / 2 + 1, center.y + 20, Features::Antiaim.ManualSide == Features::Antiaim.ManualDirection::BACK ? color : Color(188, 188, 188, 255), FONT_LEFT, _("v"));
 }
 
 void CVisuals::OtherEntities( CBaseEntity* ent ) {
